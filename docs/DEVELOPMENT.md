@@ -112,8 +112,8 @@ Each Go project can define `.godesk.yaml` in the module root:
 name: my-project
 env_file: .env
 compose_file: docker/docker-compose.yml
-lint_cmd: golangci-lint run
-up_cmd: make up
+lint_cmd: "go vet ./... && golangci-lint run"
+up_cmd: "make up ENV=local"
 health_urls:
   - http://localhost:8080/health
 log_files:
@@ -153,7 +153,7 @@ When multiple downward matches exist, prefer the shallowest match, then the lexi
 
 ## Runtime Behavior
 
-`up` starts dependency services for a project. It uses `up_cmd` when configured; otherwise it uses Docker Compose with the resolved compose file.
+`up` starts dependency services for a project. It uses `up_cmd` as a shell command when configured; otherwise it uses Docker Compose with the resolved compose file.
 
 `ports` collects candidate ports from `.env` entries with port-like keys and from Docker Compose published ports, then reports local listener status.
 
@@ -161,7 +161,7 @@ When multiple downward matches exist, prefer the shallowest match, then the lexi
 
 `logs` tails configured `log_files` and Docker Compose service logs. Service arguments filter Compose logs only.
 
-`lint` runs `lint_cmd` from `.godesk.yaml` when configured.
+`lint` runs `lint_cmd` from `.godesk.yaml` as a shell command when configured.
 
 `inspect` prints resolved project config, parsed env entries, and compose services.
 

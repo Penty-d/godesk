@@ -112,8 +112,8 @@ projects.yaml  扫描后的项目索引
 name: my-project
 env_file: .env
 compose_file: docker/docker-compose.yml
-lint_cmd: golangci-lint run
-up_cmd: make up
+lint_cmd: "go vet ./... && golangci-lint run"
+up_cmd: "make up ENV=local"
 health_urls:
   - http://localhost:8080/health
 log_files:
@@ -153,7 +153,7 @@ project/
 
 ## 运行行为
 
-`up` 会启动项目依赖服务。配置了 `up_cmd` 时使用该命令；否则使用解析到的 compose 文件运行 Docker Compose。
+`up` 会启动项目依赖服务。配置了 `up_cmd` 时会把它作为 shell 命令执行；否则使用解析到的 compose 文件运行 Docker Compose。
 
 `ports` 会从 `.env` 中端口类变量和 Docker Compose 已发布端口收集候选端口，然后报告本地监听状态。
 
@@ -161,7 +161,7 @@ project/
 
 `logs` 会跟踪已配置的 `log_files` 和 Docker Compose 服务日志。服务参数只过滤 Compose 日志。
 
-`lint` 会在配置了 `lint_cmd` 时运行 `.godesk.yaml` 中的 lint 命令。
+`lint` 会在配置了 `lint_cmd` 时把 `.godesk.yaml` 中的命令作为 shell 命令执行。
 
 `inspect` 会打印解析后的项目配置、env 条目和 compose 服务。
 

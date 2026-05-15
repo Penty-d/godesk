@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
+	"runtime"
 	"strings"
 )
 
@@ -15,11 +16,12 @@ type Runner struct {
 }
 
 func (r Runner) Run(ctx context.Context, dir string, command string) error {
-	fields := strings.Fields(command)
-	if len(fields) == 0 {
+	command = strings.TrimSpace(command)
+	if command == "" {
 		return errors.New("empty command")
 	}
-	cmd := exec.CommandContext(ctx, fields[0], fields[1:]...)
+	name, args := shellCommand(command)
+	cmd := exec.CommandContext(ctx, name, args...)
 	cmd.Dir = dir
 	cmd.Stdout = r.Stdout
 	cmd.Stderr = r.Stderr
@@ -27,4 +29,11 @@ func (r Runner) Run(ctx context.Context, dir string, command string) error {
 		return fmt.Errorf("%s: %w", command, err)
 	}
 	return nil
+}
+
+func shellCommand(command string) (string, []string) {
+	if runtime.GOOS == "windows" {
+		return "cmd", []string{"/C", command}
+	}
+	return "sh", []string{"-c", command}
 }

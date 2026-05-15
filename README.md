@@ -145,8 +145,8 @@ Each project can define a `.godesk.yaml` in the Go module root:
 name: fzuhelper-server
 env_file: .env
 compose_file: docker/docker-compose.yml
-lint_cmd: golangci-lint run
-up_cmd: make up
+lint_cmd: "go vet ./... && golangci-lint run"
+up_cmd: "make up ENV=local"
 health_urls:
   - http://localhost:8080/health
 log_files:
@@ -258,7 +258,7 @@ Start dependency services:
 godesk up <project>
 ```
 
-If `up_cmd` is configured, godesk runs it from the project root. Otherwise it runs Docker Compose with the resolved compose file.
+If `up_cmd` is configured, godesk runs it as a shell command from the project root. Otherwise it runs Docker Compose with the resolved compose file.
 
 ### `ports`
 
@@ -321,10 +321,10 @@ Run the configured lint command:
 godesk lint <project>
 ```
 
-Configure it in `.godesk.yaml`:
+Configure it in `.godesk.yaml`. The command runs through the system shell from the project root:
 
 ```yaml
-lint_cmd: golangci-lint run
+lint_cmd: "go vet ./... && golangci-lint run"
 ```
 
 ## Development

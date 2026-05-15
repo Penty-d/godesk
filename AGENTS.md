@@ -39,4 +39,4 @@ Existing history uses concise conventional-style subjects, such as `init: scaffo
 
 ## Configuration Tips
 
-Project config belongs in `.godesk.yaml` at the Go module root. Store project file paths relative to that root, for example `compose_file: docker/docker-compose.yml` and `log_files: ["./logs/app.log"]`.
+Project config belongs in `.godesk.yaml` at the Go module root. Store project file paths relative to that root, for example `compose_file: docker/docker-compose.yml` and `log_files: ["./logs/app.log"]`. Store runnable commands as shell commands, for example `lint_cmd: "go vet ./... && golangci-lint run"`.

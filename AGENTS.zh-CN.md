@@ -39,4 +39,4 @@ Go 文件使用 `gofmt` 格式化。命令构造函数命名为 `new<Name>Comman
 
 ## 配置提示
 
-项目配置放在 Go 模块根目录的 `.godesk.yaml`。项目文件路径使用相对模块根目录的路径，例如 `compose_file: docker/docker-compose.yml` 和 `log_files: ["./logs/app.log"]`。
+项目配置放在 Go 模块根目录的 `.godesk.yaml`。项目文件路径使用相对模块根目录的路径，例如 `compose_file: docker/docker-compose.yml` 和 `log_files: ["./logs/app.log"]`。可运行命令按 shell 命令保存，例如 `lint_cmd: "go vet ./... && golangci-lint run"`。

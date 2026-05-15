@@ -145,8 +145,8 @@ godesk init-local
 name: fzuhelper-server
 env_file: .env
 compose_file: docker/docker-compose.yml
-lint_cmd: golangci-lint run
-up_cmd: make up
+lint_cmd: "go vet ./... && golangci-lint run"
+up_cmd: "make up ENV=local"
 health_urls:
   - http://localhost:8080/health
 log_files:
@@ -258,7 +258,7 @@ godesk inspect <project>
 godesk up <project>
 ```
 
-如果配置了 `up_cmd`，godesk 会在项目根目录运行它。否则会使用解析到的 compose 文件运行 Docker Compose。
+如果配置了 `up_cmd`，godesk 会在项目根目录把它作为 shell 命令运行。否则会使用解析到的 compose 文件运行 Docker Compose。
 
 ### `ports`
 
@@ -321,10 +321,10 @@ log_files:
 godesk lint <project>
 ```
 
-在 `.godesk.yaml` 中配置：
+在 `.godesk.yaml` 中配置。命令会在项目根目录通过系统 shell 执行：
 
 ```yaml
-lint_cmd: golangci-lint run
+lint_cmd: "go vet ./... && golangci-lint run"
 ```
 
 ## 开发
