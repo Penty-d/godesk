@@ -67,6 +67,7 @@ godesk init <project>
 godesk inspect <project>
 godesk up <project>
 godesk ports <project>
+godesk health <project>
 godesk lint <project>
 ```
 
@@ -149,6 +150,8 @@ project/
 `up` 会启动项目依赖服务。配置了 `up_cmd` 时使用该命令；否则使用解析到的 compose 文件运行 Docker Compose。
 
 `ports` 会从 `.env` 中端口类变量和 Docker Compose 已发布端口收集候选端口，然后报告本地监听状态。
+
+`health` 会检查 `.godesk.yaml` 中的 `health_urls`，并报告状态码、耗时和请求错误。
 
 `lint` 会在配置了 `lint_cmd` 时运行 `.godesk.yaml` 中的 lint 命令。
 
@@ -254,6 +257,7 @@ env:
 compose:
 lint:
 up:
+health:
 ```
 
 缺失的可选值使用 `-`。
@@ -280,6 +284,7 @@ go run ./cmd/godesk init-local
 ```bash
 go run ./cmd/godesk ports <project>
 go run ./cmd/godesk up <project>
+go run ./cmd/godesk health <project>
 ```
 
 运行已配置工具：
@@ -344,13 +349,13 @@ init-local
 inspect
 up
 ports
+health
 lint
 ```
 
 自然的后续扩展：
 
 ```text
-健康状态命令
 多日志 tail 命令
 TUI 项目面板
 Docker 服务状态视图

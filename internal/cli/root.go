@@ -31,6 +31,7 @@ func Execute() error {
 		newInspectCommand(ctx),
 		newUpCommand(ctx),
 		newPortsCommand(ctx),
+		newHealthCommand(ctx),
 		newLintCommand(ctx),
 	)
 

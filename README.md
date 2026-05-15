@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | English
 
-godesk is a CLI workspace manager for local Go backend projects. It scans local Go modules, resolves project config, reads `.env` and Docker Compose files, starts dependency services, checks port occupancy, and runs configured lint commands.
+godesk is a CLI workspace manager for local Go backend projects. It scans local Go modules, resolves project config, reads `.env` and Docker Compose files, starts dependency services, checks port occupancy, checks health URLs, and runs configured lint commands.
 
 ## Features
 
@@ -13,6 +13,7 @@ godesk is a CLI workspace manager for local Go backend projects. It scans local 
 - Inspect resolved project config, env entries, and compose services
 - Start dependency services with Docker Compose or a custom command
 - Show local port occupancy from env and compose config
+- Check configured health URLs
 - Run a configured lint command
 
 ## Install
@@ -67,6 +68,12 @@ Check ports:
 godesk ports fzuhelper-server
 ```
 
+Check health:
+
+```bash
+godesk health fzuhelper-server
+```
+
 Start dependency services:
 
 ```bash
@@ -94,6 +101,7 @@ godesk init <project>
 godesk inspect <project>
 godesk up <project>
 godesk ports <project>
+godesk health <project>
 godesk lint <project>
 ```
 
@@ -223,6 +231,21 @@ godesk ports <project>
 ```
 
 Ports are collected from `.env` values with port-like keys and from Docker Compose published ports.
+
+### `health`
+
+Check configured health URLs:
+
+```bash
+godesk health <project>
+```
+
+Configure URLs in `.godesk.yaml`:
+
+```yaml
+health_urls:
+  - http://localhost:8080/health
+```
 
 ### `lint`
 

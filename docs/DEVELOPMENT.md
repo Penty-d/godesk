@@ -67,6 +67,7 @@ godesk init <project>
 godesk inspect <project>
 godesk up <project>
 godesk ports <project>
+godesk health <project>
 godesk lint <project>
 ```
 
@@ -149,6 +150,8 @@ When multiple downward matches exist, prefer the shallowest match, then the lexi
 `up` starts dependency services for a project. It uses `up_cmd` when configured; otherwise it uses Docker Compose with the resolved compose file.
 
 `ports` collects candidate ports from `.env` entries with port-like keys and from Docker Compose published ports, then reports local listener status.
+
+`health` checks `health_urls` from `.godesk.yaml` and reports status code, latency, and request errors.
 
 `lint` runs `lint_cmd` from `.godesk.yaml` when configured.
 
@@ -254,6 +257,7 @@ env:
 compose:
 lint:
 up:
+health:
 ```
 
 Use `-` for missing optional values.
@@ -280,6 +284,7 @@ Check runtime state:
 ```bash
 go run ./cmd/godesk ports <project>
 go run ./cmd/godesk up <project>
+go run ./cmd/godesk health <project>
 ```
 
 Run configured tooling:
@@ -344,13 +349,13 @@ init-local
 inspect
 up
 ports
+health
 lint
 ```
 
 Natural next extensions:
 
 ```text
-health status command
 multi-log tail command
 TUI project dashboard
 Docker service status view
