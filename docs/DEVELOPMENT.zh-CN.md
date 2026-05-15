@@ -113,6 +113,9 @@ lint_cmd: golangci-lint run
 up_cmd: make up
 health_urls:
   - http://localhost:8080/health
+log_files:
+  - ./logs/app.log
+  - ./logs/worker.log
 ```
 
 `godesk init <project>` 为已索引项目生成 `.godesk.yaml`。项目名来自索引记录，发现到的路径以项目根目录为基准写入。
@@ -152,6 +155,8 @@ project/
 `ports` 会从 `.env` 中端口类变量和 Docker Compose 已发布端口收集候选端口，然后报告本地监听状态。
 
 `health` 会检查 `.godesk.yaml` 中的 `health_urls`，并报告状态码、耗时和请求错误。
+
+`logs` 会跟踪已配置的 `log_files` 和 Docker Compose 服务日志。服务参数只过滤 Compose 日志。
 
 `lint` 会在配置了 `lint_cmd` 时运行 `.godesk.yaml` 中的 lint 命令。
 
@@ -258,6 +263,7 @@ compose:
 lint:
 up:
 health:
+logs:
 ```
 
 缺失的可选值使用 `-`。
@@ -285,6 +291,7 @@ go run ./cmd/godesk init-local
 go run ./cmd/godesk ports <project>
 go run ./cmd/godesk up <project>
 go run ./cmd/godesk health <project>
+go run ./cmd/godesk logs <project> --tail 50
 ```
 
 运行已配置工具：
@@ -350,13 +357,13 @@ inspect
 up
 ports
 health
+logs
 lint
 ```
 
 自然的后续扩展：
 
 ```text
-多日志 tail 命令
 TUI 项目面板
 Docker 服务状态视图
 全局配置编辑命令

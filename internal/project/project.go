@@ -16,6 +16,7 @@ type Project struct {
 	LintCmd     string   `yaml:"lint_cmd,omitempty"`
 	UpCmd       string   `yaml:"up_cmd,omitempty"`
 	HealthURLs  []string `yaml:"health_urls,omitempty"`
+	LogFiles    []string `yaml:"log_files,omitempty"`
 }
 
 func Discover(root string) (Project, error) {

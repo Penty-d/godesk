@@ -4,7 +4,7 @@
 
 ## 项目结构与模块组织
 
-`cmd/godesk/main.go` 是 CLI 入口。Cobra 命令注册和处理位于 `internal/cli`。共享逻辑按职责拆分：`internal/config` 处理全局配置、项目索引和 `.godesk.yaml`；`internal/project` 处理 Go 模块扫描和文件发现；`internal/envfile` 与 `internal/compose` 负责解析项目文件；`internal/docker`、`internal/ports`、`internal/runner` 封装运行时集成。用户文档位于 `README.md` 和 `README.zh-CN.md`；开发文档位于 `docs/`。
+`cmd/godesk/main.go` 是 CLI 入口。Cobra 命令注册和处理位于 `internal/cli`。共享逻辑按职责拆分：`internal/config` 处理全局配置、项目索引和 `.godesk.yaml`；`internal/project` 处理 Go 模块扫描和文件发现；`internal/envfile` 与 `internal/compose` 负责解析项目文件；`internal/docker`、`internal/logtail`、`internal/ports`、`internal/runner` 封装运行时集成。用户文档位于 `README.md` 和 `README.zh-CN.md`；开发文档位于 `docs/`。
 
 ## 构建、验证和开发命令
 
@@ -39,4 +39,4 @@ Go 文件使用 `gofmt` 格式化。命令构造函数命名为 `new<Name>Comman
 
 ## 配置提示
 
-项目配置放在 Go 模块根目录的 `.godesk.yaml`。项目文件路径使用相对模块根目录的路径，例如 `compose_file: docker/docker-compose.yml`。
+项目配置放在 Go 模块根目录的 `.godesk.yaml`。项目文件路径使用相对模块根目录的路径，例如 `compose_file: docker/docker-compose.yml` 和 `log_files: ["./logs/app.log"]`。

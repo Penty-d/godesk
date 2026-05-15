@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | English
 
-godesk is a CLI workspace manager for local Go backend projects. It scans local Go modules, resolves project config, reads `.env` and Docker Compose files, starts dependency services, checks port occupancy, checks health URLs, and runs configured lint commands.
+godesk is a CLI workspace manager for local Go backend projects. It scans local Go modules, resolves project config, reads `.env` and Docker Compose files, starts dependency services, checks port occupancy, tails logs, checks health URLs, and runs configured lint commands.
 
 ## Features
 
@@ -13,6 +13,7 @@ godesk is a CLI workspace manager for local Go backend projects. It scans local 
 - Inspect resolved project config, env entries, and compose services
 - Start dependency services with Docker Compose or a custom command
 - Show local port occupancy from env and compose config
+- Tail configured log files and Docker Compose service logs
 - Check configured health URLs
 - Run a configured lint command
 
@@ -74,6 +75,12 @@ Check health:
 godesk health fzuhelper-server
 ```
 
+Tail logs:
+
+```bash
+godesk logs fzuhelper-server
+```
+
 Start dependency services:
 
 ```bash
@@ -102,6 +109,7 @@ godesk inspect <project>
 godesk up <project>
 godesk ports <project>
 godesk health <project>
+godesk logs <project> [service...]
 godesk lint <project>
 ```
 
@@ -130,6 +138,9 @@ lint_cmd: golangci-lint run
 up_cmd: make up
 health_urls:
   - http://localhost:8080/health
+log_files:
+  - ./logs/app.log
+  - ./logs/worker.log
 ```
 
 `godesk init <project>` creates this file for an indexed project. `godesk init-local` creates it for the current Go module.
@@ -245,6 +256,34 @@ Configure URLs in `.godesk.yaml`:
 ```yaml
 health_urls:
   - http://localhost:8080/health
+```
+
+### `logs`
+
+Tail configured log files and Docker Compose service logs:
+
+```bash
+godesk logs <project>
+```
+
+Tail only file logs:
+
+```bash
+godesk logs <project> --files-only --tail 100
+```
+
+Tail only Compose logs for specific services:
+
+```bash
+godesk logs <project> api worker --compose-only
+```
+
+Configure file logs in `.godesk.yaml`:
+
+```yaml
+log_files:
+  - ./logs/app.log
+  - ./logs/worker.log
 ```
 
 ### `lint`

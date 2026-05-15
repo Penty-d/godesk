@@ -113,6 +113,9 @@ lint_cmd: golangci-lint run
 up_cmd: make up
 health_urls:
   - http://localhost:8080/health
+log_files:
+  - ./logs/app.log
+  - ./logs/worker.log
 ```
 
 `godesk init <project>` generates `.godesk.yaml` for an indexed project. The project name comes from the index record, and discovered paths are written relative to the project root.
@@ -152,6 +155,8 @@ When multiple downward matches exist, prefer the shallowest match, then the lexi
 `ports` collects candidate ports from `.env` entries with port-like keys and from Docker Compose published ports, then reports local listener status.
 
 `health` checks `health_urls` from `.godesk.yaml` and reports status code, latency, and request errors.
+
+`logs` tails configured `log_files` and Docker Compose service logs. Service arguments filter Compose logs only.
 
 `lint` runs `lint_cmd` from `.godesk.yaml` when configured.
 
@@ -258,6 +263,7 @@ compose:
 lint:
 up:
 health:
+logs:
 ```
 
 Use `-` for missing optional values.
@@ -285,6 +291,7 @@ Check runtime state:
 go run ./cmd/godesk ports <project>
 go run ./cmd/godesk up <project>
 go run ./cmd/godesk health <project>
+go run ./cmd/godesk logs <project> --tail 50
 ```
 
 Run configured tooling:
@@ -350,13 +357,13 @@ inspect
 up
 ports
 health
+logs
 lint
 ```
 
 Natural next extensions:
 
 ```text
-multi-log tail command
 TUI project dashboard
 Docker service status view
 global config editing command

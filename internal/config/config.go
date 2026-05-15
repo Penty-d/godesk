@@ -30,6 +30,7 @@ type ProjectOverride struct {
 	LintCmd     string   `yaml:"lint_cmd"`
 	UpCmd       string   `yaml:"up_cmd"`
 	HealthURLs  []string `yaml:"health_urls"`
+	LogFiles    []string `yaml:"log_files"`
 }
 
 type ProjectIndex struct {
@@ -160,6 +161,9 @@ func ApplyOverride(p project.Project, override ProjectOverride) project.Project 
 	}
 	if len(override.HealthURLs) > 0 {
 		p.HealthURLs = override.HealthURLs
+	}
+	if len(override.LogFiles) > 0 {
+		p.LogFiles = override.LogFiles
 	}
 	return p
 }

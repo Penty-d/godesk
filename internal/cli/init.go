@@ -31,6 +31,7 @@ func newInitCommand(app *appContext) *cobra.Command {
 				LintCmd:     p.LintCmd,
 				UpCmd:       p.UpCmd,
 				HealthURLs:  p.HealthURLs,
+				LogFiles:    p.LogFiles,
 			}
 			path, err := config.SaveProjectOverride(p.Path, override, force)
 			if err != nil {
@@ -67,6 +68,7 @@ func newInitLocalCommand(app *appContext) *cobra.Command {
 				LintCmd:     p.LintCmd,
 				UpCmd:       p.UpCmd,
 				HealthURLs:  p.HealthURLs,
+				LogFiles:    p.LogFiles,
 			}
 			path, err := config.SaveProjectOverride(p.Path, override, force)
 			if err != nil {

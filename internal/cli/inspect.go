@@ -27,8 +27,8 @@ func newInspectCommand(app *appContext) *cobra.Command {
 				return err
 			}
 			out := cmd.OutOrStdout()
-			fmt.Fprintf(out, "name: %s\npath: %s\nenv: %s\ncompose: %s\nlint: %s\nup: %s\nhealth: %s\n",
-				p.Name, p.Path, marker(p.EnvFile), marker(p.ComposeFile), marker(p.LintCmd), marker(p.UpCmd), healthMarker(p.HealthURLs))
+			fmt.Fprintf(out, "name: %s\npath: %s\nenv: %s\ncompose: %s\nlint: %s\nup: %s\nhealth: %s\nlogs: %s\n",
+				p.Name, p.Path, marker(p.EnvFile), marker(p.ComposeFile), marker(p.LintCmd), marker(p.UpCmd), listMarker(p.HealthURLs), listMarker(p.LogFiles))
 			if p.EnvFile != "" {
 				file, err := os.Open(filepath.Join(p.Path, p.EnvFile))
 				if err == nil {
@@ -62,9 +62,9 @@ func newInspectCommand(app *appContext) *cobra.Command {
 	}
 }
 
-func healthMarker(urls []string) string {
-	if len(urls) == 0 {
+func listMarker(items []string) string {
+	if len(items) == 0 {
 		return "-"
 	}
-	return strings.Join(urls, ", ")
+	return strings.Join(items, ", ")
 }

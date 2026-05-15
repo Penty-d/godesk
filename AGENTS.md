@@ -4,7 +4,7 @@
 
 ## Project Structure & Module Organization
 
-`cmd/godesk/main.go` is the CLI entrypoint. Cobra command wiring lives in `internal/cli`. Shared behavior is split by responsibility: `internal/config` handles global config, project index, and `.godesk.yaml`; `internal/project` handles Go module scanning and file discovery; `internal/envfile` and `internal/compose` parse project files; `internal/docker`, `internal/ports`, and `internal/runner` wrap runtime integrations. User docs live in `README.md` and `README.zh-CN.md`; developer docs live in `docs/`.
+`cmd/godesk/main.go` is the CLI entrypoint. Cobra command wiring lives in `internal/cli`. Shared behavior is split by responsibility: `internal/config` handles global config, project index, and `.godesk.yaml`; `internal/project` handles Go module scanning and file discovery; `internal/envfile` and `internal/compose` parse project files; `internal/docker`, `internal/logtail`, `internal/ports`, and `internal/runner` wrap runtime integrations. User docs live in `README.md` and `README.zh-CN.md`; developer docs live in `docs/`.
 
 ## Build, Test, and Development Commands
 
@@ -39,4 +39,4 @@ Existing history uses concise conventional-style subjects, such as `init: scaffo
 
 ## Configuration Tips
 
-Project config belongs in `.godesk.yaml` at the Go module root. Store project file paths relative to that root, for example `compose_file: docker/docker-compose.yml`.
+Project config belongs in `.godesk.yaml` at the Go module root. Store project file paths relative to that root, for example `compose_file: docker/docker-compose.yml` and `log_files: ["./logs/app.log"]`.

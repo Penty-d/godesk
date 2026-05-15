@@ -39,6 +39,30 @@ func (c Compose) Up(ctx context.Context, dir string, composeFile string) error {
 	return nil
 }
 
+func (c Compose) Logs(ctx context.Context, dir string, composeFile string, services []string, tail int) error {
+	if _, err := exec.LookPath("docker"); err != nil {
+		return errors.New("docker CLI not found")
+	}
+	args := []string{"compose"}
+	if composeFile != "" {
+		args = append(args, "-f", composeFile)
+	}
+	args = append(args, "logs", "-f", "--tail", fmt.Sprintf("%d", tail))
+	args = append(args, services...)
+
+	cmd := exec.CommandContext(ctx, "docker", args...)
+	cmd.Dir = dir
+	cmd.Stdout = c.Stdout
+	cmd.Stderr = c.Stderr
+	if err := cmd.Run(); err != nil {
+		if errors.Is(ctx.Err(), context.Canceled) {
+			return nil
+		}
+		return classifyDockerError(err, "")
+	}
+	return nil
+}
+
 func classifyDockerError(err error, output string) error {
 	if err == nil {
 		return nil
