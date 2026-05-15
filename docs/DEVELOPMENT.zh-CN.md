@@ -75,6 +75,9 @@ godesk lint <project>
 
 ```bash
 godesk list
+godesk roots add <path>
+godesk roots list
+godesk roots remove <path>
 godesk scan [root...]
 ```
 
@@ -215,6 +218,9 @@ func newHealthCommand(app *appContext) *cobra.Command {
 
 ```bash
 godesk list
+godesk roots add <path>
+godesk roots list
+godesk roots remove <path>
 godesk scan [root...]
 ```
 
@@ -351,6 +357,7 @@ go run ./cmd/godesk list
 ```text
 scan
 list
+roots
 init
 init-local
 inspect

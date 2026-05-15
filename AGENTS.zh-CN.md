@@ -4,7 +4,7 @@
 
 ## 项目结构与模块组织
 
-`cmd/godesk/main.go` 是 CLI 入口。Cobra 命令注册和处理位于 `internal/cli`。共享逻辑按职责拆分：`internal/config` 处理全局配置、项目索引和 `.godesk.yaml`；`internal/project` 处理 Go 模块扫描和文件发现；`internal/envfile` 与 `internal/compose` 负责解析项目文件；`internal/docker`、`internal/logtail`、`internal/ports`、`internal/runner` 封装运行时集成。用户文档位于 `README.md` 和 `README.zh-CN.md`；开发文档位于 `docs/`。
+`cmd/godesk/main.go` 是 CLI 入口。Cobra 命令注册和处理位于 `internal/cli`。共享逻辑按职责拆分：`internal/config` 处理全局配置、扫描根目录、项目索引和 `.godesk.yaml`；`internal/project` 处理 Go 模块扫描和文件发现；`internal/envfile` 与 `internal/compose` 负责解析项目文件；`internal/docker`、`internal/logtail`、`internal/ports`、`internal/runner` 封装运行时集成。用户文档位于 `README.md` 和 `README.zh-CN.md`；开发文档位于 `docs/`。
 
 ## 构建、验证和开发命令
 
@@ -27,7 +27,7 @@ lsof -v
 
 ## 代码风格与命名约定
 
-Go 文件使用 `gofmt` 格式化。命令构造函数命名为 `new<Name>Command`，并在 `internal/cli/root.go` 注册。项目级命令使用 `godesk <command> <project>`，并通过 `requireProjectName` 校验参数。可复用逻辑放入职责聚焦的 internal 包。
+Go 文件使用 `gofmt` 格式化。命令构造函数命名为 `new<Name>Command`，并在 `internal/cli/root.go` 注册。项目级命令使用 `godesk <command> <project>`，并通过 `requireProjectName` 校验参数。全局配置命令使用明确子命令，例如 `godesk roots add <path>`。可复用逻辑放入职责聚焦的 internal 包。
 
 ## 验证指南
 

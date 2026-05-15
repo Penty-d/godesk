@@ -9,6 +9,7 @@ godesk is a CLI workspace manager for local Go backend projects. It scans local 
 - Scan local directories for Go projects by `go.mod`
 - Resolve `.env` and Docker Compose files near a project
 - Generate per-project `.godesk.yaml`
+- Manage default scan roots
 - List indexed projects
 - Inspect resolved project config, env entries, and compose services
 - Start dependency services with Docker Compose or a custom command
@@ -43,6 +44,13 @@ Scan a directory that contains Go projects:
 
 ```bash
 godesk scan /Users/penty/Desktop/Projects/fuu
+```
+
+Save a default scan root:
+
+```bash
+godesk roots add /Users/penty/Desktop/Projects/fuu
+godesk scan
 ```
 
 List indexed projects:
@@ -116,6 +124,9 @@ godesk lint <project>
 Global commands:
 
 ```bash
+godesk roots add <path>
+godesk roots list
+godesk roots remove <path>
 godesk scan [root...]
 godesk list
 ```
@@ -191,6 +202,22 @@ Show indexed projects:
 
 ```bash
 godesk list
+```
+
+### `roots`
+
+Manage default scan roots:
+
+```bash
+godesk roots add /path/to/workspace
+godesk roots list
+godesk roots remove /path/to/workspace
+```
+
+After adding roots, scan can run without arguments:
+
+```bash
+godesk scan
 ```
 
 ### `init`

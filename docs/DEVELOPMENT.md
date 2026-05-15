@@ -75,6 +75,9 @@ Global commands operate on the workspace index or scan roots:
 
 ```bash
 godesk list
+godesk roots add <path>
+godesk roots list
+godesk roots remove <path>
 godesk scan [root...]
 ```
 
@@ -215,6 +218,9 @@ Examples of global commands:
 
 ```bash
 godesk list
+godesk roots add <path>
+godesk roots list
+godesk roots remove <path>
 godesk scan [root...]
 ```
 
@@ -351,6 +357,7 @@ Current implemented scope:
 ```text
 scan
 list
+roots
 init
 init-local
 inspect

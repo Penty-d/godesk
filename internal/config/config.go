@@ -69,14 +69,23 @@ func (s *Store) LoadGlobal() (GlobalConfig, error) {
 	if err != nil {
 		return cfg, err
 	}
-	for i, root := range cfg.Roots {
-		expanded, err := expandPath(root)
-		if err != nil {
-			return cfg, err
-		}
-		cfg.Roots[i] = expanded
+	cfg.Roots, err = normalizeRoots(cfg.Roots)
+	if err != nil {
+		return cfg, err
 	}
 	return cfg, nil
+}
+
+func (s *Store) SaveGlobal(cfg GlobalConfig) error {
+	roots, err := normalizeRoots(cfg.Roots)
+	if err != nil {
+		return err
+	}
+	cfg.Roots = roots
+	if err := os.MkdirAll(s.baseDir, 0o755); err != nil {
+		return err
+	}
+	return writeYAML(s.ConfigPath(), cfg)
 }
 
 func (s *Store) LoadIndex() (ProjectIndex, error) {
@@ -199,6 +208,31 @@ func expandPath(path string) (string, error) {
 		return filepath.Join(home, path[2:]), nil
 	}
 	return "", fmt.Errorf("unsupported path %q", path)
+}
+
+func NormalizeRoot(root string) (string, error) {
+	return expandPath(root)
+}
+
+func normalizeRoots(roots []string) ([]string, error) {
+	seen := map[string]struct{}{}
+	normalized := make([]string, 0, len(roots))
+	for _, root := range roots {
+		if root == "" {
+			continue
+		}
+		expanded, err := expandPath(root)
+		if err != nil {
+			return nil, err
+		}
+		if _, ok := seen[expanded]; ok {
+			continue
+		}
+		seen[expanded] = struct{}{}
+		normalized = append(normalized, expanded)
+	}
+	sort.Strings(normalized)
+	return normalized, nil
 }
 
 func sortProjects(projects []project.Project) {

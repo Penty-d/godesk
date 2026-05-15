@@ -26,6 +26,7 @@ func Execute() error {
 	rootCmd.AddCommand(
 		newInitCommand(ctx),
 		newInitLocalCommand(ctx),
+		newRootsCommand(ctx),
 		newScanCommand(ctx),
 		newListCommand(ctx),
 		newInspectCommand(ctx),
