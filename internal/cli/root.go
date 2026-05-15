@@ -35,6 +35,7 @@ func Execute() error {
 		newHealthCommand(ctx),
 		newLogsCommand(ctx),
 		newLintCommand(ctx),
+		newTUICommand(ctx),
 	)
 
 	rootCmd.SetOut(os.Stdout)

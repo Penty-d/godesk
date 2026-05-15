@@ -4,9 +4,9 @@
 
 ## 目标
 
-godesk 是一个本地 Go 后端工作台管理器。它帮助开发者扫描本地 Go 项目、解析项目配置、启动依赖服务、查看端口状态，并运行已配置的项目工具。
+godesk 是一个本地 Go 后端工作台管理器。它帮助开发者扫描本地 Go 项目、解析项目配置、启动依赖服务、查看端口状态、跟踪日志，并运行已配置的项目工具。
 
-当前产品入口是 CLI。后续 TUI 可以构建在同一套 internal 包之上。
+当前产品入口包括 CLI，以及通过 `godesk tui` 打开的无额外依赖终端工作台。
 
 ## 环境要求
 
@@ -37,18 +37,18 @@ lsof -v
 
 ```text
 cmd/godesk/main.go       CLI 入口
-internal/cli             Cobra 命令注册和命令处理
+internal/cli             Cobra 命令注册、命令处理和 TUI
 internal/config          全局配置、项目索引和 .godesk.yaml 处理
 internal/project         Go 项目扫描和文件发现
 internal/envfile         .env 解析器
 internal/compose         Docker Compose 解析器
 internal/docker          Docker Compose 进程集成
 internal/ports           端口候选提取和 lsof 检查
-internal/runner          自定义命令执行器
+internal/runner          自定义 shell 命令执行器
 docs                     开发文档
 ```
 
-共享行为放在 internal 包中，CLI 和后续 TUI 都使用同一套发现、解析、Docker、端口和命令执行逻辑。
+共享行为放在 internal 包中，CLI 命令和 TUI 动作都使用同一套发现、解析、Docker、端口和命令执行逻辑。
 
 ## 命令模型
 
@@ -79,6 +79,7 @@ godesk roots add <path>
 godesk roots list
 godesk roots remove <path>
 godesk scan [root...]
+godesk tui
 ```
 
 已索引项目命令使用和现有项目级命令一致的位置接收项目名。
@@ -164,6 +165,8 @@ project/
 `lint` 会在配置了 `lint_cmd` 时把 `.godesk.yaml` 中的命令作为 shell 命令执行。
 
 `inspect` 会打印解析后的项目配置、env 条目和 compose 服务。
+
+`tui` 会基于项目索引打开交互式终端工作台。它复用已索引项目数据和现有命令行为，作为统一入口使用。
 
 ## 新增项目级命令
 
@@ -366,12 +369,12 @@ ports
 health
 logs
 lint
+tui
 ```
 
 自然的后续扩展：
 
 ```text
-TUI 项目面板
 Docker 服务状态视图
 全局配置编辑命令
 ```

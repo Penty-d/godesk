@@ -4,9 +4,9 @@
 
 ## Purpose
 
-godesk is a local Go backend workspace manager. It helps developers scan local Go projects, resolve project config, start dependency services, inspect ports, and run configured project tooling.
+godesk is a local Go backend workspace manager. It helps developers scan local Go projects, resolve project config, start dependency services, inspect ports, tail logs, and run configured project tooling.
 
-The current product surface is CLI. TUI can build on top of the same internal packages later.
+The current product surface is CLI plus a dependency-free terminal workspace opened with `godesk tui`.
 
 ## Environment
 
@@ -37,18 +37,18 @@ lsof -v
 
 ```text
 cmd/godesk/main.go       CLI entrypoint
-internal/cli             Cobra command wiring and command handlers
+internal/cli             Cobra command wiring, command handlers, and TUI
 internal/config          Global config, project index, and .godesk.yaml handling
 internal/project         Go project scanning and file discovery
 internal/envfile         .env parser
 internal/compose         Docker Compose parser
 internal/docker          Docker Compose process integration
 internal/ports           Port candidate extraction and lsof checks
-internal/runner          Custom command runner
+internal/runner          Custom shell command runner
 docs                     Development documentation
 ```
 
-Keep shared behavior in internal packages so CLI and future TUI code can use the same discovery, parsing, Docker, port, and runner logic.
+Keep shared behavior in internal packages so CLI commands and TUI actions use the same discovery, parsing, Docker, port, and runner logic.
 
 ## Command Model
 
@@ -79,6 +79,7 @@ godesk roots add <path>
 godesk roots list
 godesk roots remove <path>
 godesk scan [root...]
+godesk tui
 ```
 
 Commands for indexed projects should accept the project name in the same positional location as the existing project commands.
@@ -164,6 +165,8 @@ When multiple downward matches exist, prefer the shallowest match, then the lexi
 `lint` runs `lint_cmd` from `.godesk.yaml` as a shell command when configured.
 
 `inspect` prints resolved project config, parsed env entries, and compose services.
+
+`tui` opens an interactive terminal workspace over the project index. It should reuse indexed project data and existing command behavior instead of creating a separate source of truth.
 
 ## Adding A Project Command
 
@@ -366,12 +369,12 @@ ports
 health
 logs
 lint
+tui
 ```
 
 Natural next extensions:
 
 ```text
-TUI project dashboard
 Docker service status view
 global config editing command
 ```
