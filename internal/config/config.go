@@ -27,7 +27,6 @@ type ProjectOverride struct {
 	Name        string   `yaml:"name"`
 	EnvFile     string   `yaml:"env_file"`
 	ComposeFile string   `yaml:"compose_file"`
-	TestCmd     string   `yaml:"test_cmd"`
 	LintCmd     string   `yaml:"lint_cmd"`
 	UpCmd       string   `yaml:"up_cmd"`
 	HealthURLs  []string `yaml:"health_urls"`
@@ -126,6 +125,23 @@ func LoadProjectOverride(root string) (ProjectOverride, bool, error) {
 	return override, true, nil
 }
 
+func SaveProjectOverride(root string, override ProjectOverride, overwrite bool) (string, error) {
+	path := filepath.Join(root, projectFileName)
+	if !overwrite {
+		if _, err := os.Stat(path); err == nil {
+			return "", fmt.Errorf("%s already exists; pass --force to overwrite", path)
+		} else if !errors.Is(err, os.ErrNotExist) {
+			return "", err
+		}
+	}
+	data, err := yaml.Marshal(override)
+	if err != nil {
+		return "", err
+	}
+	data = append([]byte("# godesk project config\n"), data...)
+	return path, os.WriteFile(path, data, 0o644)
+}
+
 func ApplyOverride(p project.Project, override ProjectOverride) project.Project {
 	if override.Name != "" {
 		p.Name = override.Name
@@ -135,9 +151,6 @@ func ApplyOverride(p project.Project, override ProjectOverride) project.Project 
 	}
 	if override.ComposeFile != "" {
 		p.ComposeFile = override.ComposeFile
-	}
-	if override.TestCmd != "" {
-		p.TestCmd = override.TestCmd
 	}
 	if override.LintCmd != "" {
 		p.LintCmd = override.LintCmd

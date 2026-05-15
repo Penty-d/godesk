@@ -26,8 +26,8 @@ func newInspectCommand(app *appContext) *cobra.Command {
 				return err
 			}
 			out := cmd.OutOrStdout()
-			fmt.Fprintf(out, "name: %s\npath: %s\nenv: %s\ncompose: %s\ntest: %s\nlint: %s\nup: %s\n",
-				p.Name, p.Path, marker(p.EnvFile), marker(p.ComposeFile), marker(p.TestCmd), marker(p.LintCmd), marker(p.UpCmd))
+			fmt.Fprintf(out, "name: %s\npath: %s\nenv: %s\ncompose: %s\nlint: %s\nup: %s\n",
+				p.Name, p.Path, marker(p.EnvFile), marker(p.ComposeFile), marker(p.LintCmd), marker(p.UpCmd))
 			if p.EnvFile != "" {
 				file, err := os.Open(filepath.Join(p.Path, p.EnvFile))
 				if err == nil {

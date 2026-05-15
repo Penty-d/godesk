@@ -24,12 +24,13 @@ func Execute() error {
 	}
 
 	rootCmd.AddCommand(
+		newInitCommand(ctx),
+		newInitLocalCommand(ctx),
 		newScanCommand(ctx),
 		newListCommand(ctx),
 		newInspectCommand(ctx),
 		newUpCommand(ctx),
 		newPortsCommand(ctx),
-		newTestCommand(ctx),
 		newLintCommand(ctx),
 	)
 

@@ -12,8 +12,8 @@ import (
 func newScanCommand(app *appContext) *cobra.Command {
 	var roots []string
 	cmd := &cobra.Command{
-		Use:   "scan",
-		Short: "Scan configured roots for Go projects",
+		Use:   "scan [root...]",
+		Short: "Scan roots for Go projects",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			global, err := app.store.LoadGlobal()
 			if err != nil {
@@ -21,8 +21,9 @@ func newScanCommand(app *appContext) *cobra.Command {
 			}
 			allRoots := append([]string{}, global.Roots...)
 			allRoots = append(allRoots, roots...)
+			allRoots = append(allRoots, args...)
 			if len(allRoots) == 0 {
-				return fmt.Errorf("no roots configured; pass --root <dir> or add roots to %s", app.store.ConfigPath())
+				return fmt.Errorf("no roots configured; pass a root path or add roots to %s", app.store.ConfigPath())
 			}
 
 			projects, err := project.ScanRoots(allRoots)

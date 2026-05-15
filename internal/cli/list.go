@@ -11,6 +11,7 @@ func newListCommand(app *appContext) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List indexed Go projects",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			idx, err := app.store.LoadIndex()
 			if err != nil {
