@@ -27,7 +27,7 @@ lsof -v
 
 ## 代码风格与命名约定
 
-Go 文件使用 `gofmt` 格式化。命令构造函数命名为 `new<Name>Command`，并在 `internal/cli/root.go` 注册。项目级命令使用 `godesk <command> <project>`，并通过 `requireProjectName` 校验参数。全局配置命令使用明确子命令，例如 `godesk roots add <path>`。可复用逻辑放入职责聚焦的 internal 包。
+Go 文件使用 `gofmt` 格式化。命令构造函数命名为 `new<Name>Command`，并在 `internal/cli/root.go` 注册。项目级命令使用 `godesk <command> <project>`，并通过 `requireProjectName` 校验参数。全局配置命令使用明确子命令，例如 `godesk roots add <path>`。校验类命令统一输出 `ok`、`warn` 和 `fail`。可复用逻辑放入职责聚焦的 internal 包。
 
 ## 验证指南
 

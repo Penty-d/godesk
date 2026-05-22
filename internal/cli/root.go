@@ -30,6 +30,7 @@ func Execute() error {
 		newScanCommand(ctx),
 		newListCommand(ctx),
 		newInspectCommand(ctx),
+		newDoctorCommand(ctx),
 		newUpCommand(ctx),
 		newPortsCommand(ctx),
 		newHealthCommand(ctx),

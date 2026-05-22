@@ -27,7 +27,7 @@ lsof -v
 
 ## Coding Style & Naming Conventions
 
-Format Go files with `gofmt`. Keep command constructors named `new<Name>Command` and register them in `internal/cli/root.go`. Project commands use `godesk <command> <project>` and validate with `requireProjectName`. Global config commands use explicit subcommands such as `godesk roots add <path>`. Put reusable logic in focused internal packages rather than inside command handlers.
+Format Go files with `gofmt`. Keep command constructors named `new<Name>Command` and register them in `internal/cli/root.go`. Project commands use `godesk <command> <project>` and validate with `requireProjectName`. Global config commands use explicit subcommands such as `godesk roots add <path>`. Validation commands should report `ok`, `warn`, and `fail` consistently. Put reusable logic in focused internal packages rather than inside command handlers.
 
 ## Testing Guidelines
 

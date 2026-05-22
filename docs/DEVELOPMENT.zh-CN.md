@@ -65,6 +65,7 @@ godesk <command> <project>
 ```bash
 godesk init <project>
 godesk inspect <project>
+godesk doctor <project>
 godesk up <project>
 godesk ports <project>
 godesk health <project>
@@ -166,6 +167,8 @@ project/
 `lint` 会在配置了 `lint_cmd` 时把 `.godesk.yaml` 中的命令作为 shell 命令执行。
 
 `inspect` 会打印解析后的项目配置、env 条目和 compose 服务。
+
+`doctor` 会校验项目配置和宿主机工具可用性，不启动服务，也不修改文件。
 
 `tui` 会基于项目索引打开交互式终端工作台。它复用已索引项目数据和现有命令行为，作为统一入口使用。
 
@@ -286,6 +289,7 @@ logs:
 go run ./cmd/godesk scan /path/to/workspace
 go run ./cmd/godesk list
 go run ./cmd/godesk inspect <project>
+go run ./cmd/godesk doctor <project>
 ```
 
 初始化项目配置：
@@ -365,6 +369,7 @@ roots
 init
 init-local
 inspect
+doctor
 up
 ports
 health

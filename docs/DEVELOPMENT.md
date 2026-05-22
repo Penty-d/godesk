@@ -65,6 +65,7 @@ Current project commands:
 ```bash
 godesk init <project>
 godesk inspect <project>
+godesk doctor <project>
 godesk up <project>
 godesk ports <project>
 godesk health <project>
@@ -166,6 +167,8 @@ When multiple downward matches exist, prefer the shallowest match, then the lexi
 `lint` runs `lint_cmd` from `.godesk.yaml` as a shell command when configured.
 
 `inspect` prints resolved project config, parsed env entries, and compose services.
+
+`doctor` validates project configuration and host tool availability without starting services or modifying files.
 
 `tui` opens an interactive terminal workspace over the project index. It should reuse indexed project data and existing command behavior instead of creating a separate source of truth.
 
@@ -286,6 +289,7 @@ Scan and inspect a workspace:
 go run ./cmd/godesk scan /path/to/workspace
 go run ./cmd/godesk list
 go run ./cmd/godesk inspect <project>
+go run ./cmd/godesk doctor <project>
 ```
 
 Initialize project config:
@@ -365,6 +369,7 @@ roots
 init
 init-local
 inspect
+doctor
 up
 ports
 health
