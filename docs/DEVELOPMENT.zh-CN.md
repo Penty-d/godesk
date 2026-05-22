@@ -67,6 +67,7 @@ godesk init <project>
 godesk inspect <project>
 godesk doctor <project>
 godesk up <project>
+godesk ps <project>
 godesk ports <project>
 godesk health <project>
 godesk logs <project> [service...]
@@ -157,6 +158,8 @@ project/
 ## 运行行为
 
 `up` 会启动项目依赖服务。配置了 `up_cmd` 时会把它作为 shell 命令执行；否则使用解析到的 compose 文件运行 Docker Compose。
+
+`ps` 会基于解析到的 `compose_file` 查看 Docker Compose 服务状态。
 
 `ports` 会从 `.env` 中端口类变量和 Docker Compose 已发布端口收集候选端口，然后报告本地监听状态。
 
@@ -371,6 +374,7 @@ init-local
 inspect
 doctor
 up
+ps
 ports
 health
 logs

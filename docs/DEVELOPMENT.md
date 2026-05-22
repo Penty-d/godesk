@@ -67,6 +67,7 @@ godesk init <project>
 godesk inspect <project>
 godesk doctor <project>
 godesk up <project>
+godesk ps <project>
 godesk ports <project>
 godesk health <project>
 godesk logs <project> [service...]
@@ -157,6 +158,8 @@ When multiple downward matches exist, prefer the shallowest match, then the lexi
 ## Runtime Behavior
 
 `up` starts dependency services for a project. It uses `up_cmd` as a shell command when configured; otherwise it uses Docker Compose with the resolved compose file.
+
+`ps` shows Docker Compose service status for the resolved `compose_file`.
 
 `ports` collects candidate ports from `.env` entries with port-like keys and from Docker Compose published ports, then reports local listener status.
 
@@ -371,6 +374,7 @@ init-local
 inspect
 doctor
 up
+ps
 ports
 health
 logs

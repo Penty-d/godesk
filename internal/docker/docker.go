@@ -73,6 +73,30 @@ func (c Compose) Logs(ctx context.Context, dir string, composeFile string, servi
 	return nil
 }
 
+func (c Compose) Ps(ctx context.Context, dir string, composeFile string) error {
+	if _, err := exec.LookPath("docker"); err != nil {
+		return errors.New("docker CLI not found")
+	}
+	args := []string{"compose"}
+	if composeFile != "" {
+		resolved, err := project.NormalizeProjectPath(dir, composeFile)
+		if err != nil {
+			return err
+		}
+		args = append(args, "-f", resolved)
+	}
+	args = append(args, "ps")
+
+	cmd := exec.CommandContext(ctx, "docker", args...)
+	cmd.Dir = dir
+	cmd.Stdout = c.Stdout
+	cmd.Stderr = c.Stderr
+	if err := cmd.Run(); err != nil {
+		return classifyDockerError(err, "")
+	}
+	return nil
+}
+
 func classifyDockerError(err error, output string) error {
 	if err == nil {
 		return nil

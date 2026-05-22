@@ -4,7 +4,7 @@
 
 ## Project Structure & Module Organization
 
-`cmd/godesk/main.go` is the CLI entrypoint. Cobra command wiring and the dependency-free TUI live in `internal/cli`. Shared behavior is split by responsibility: `internal/config` handles global config, scan roots, project index, and `.godesk.yaml`; `internal/project` handles Go module scanning and file discovery; `internal/envfile` and `internal/compose` parse project files; `internal/docker`, `internal/logtail`, `internal/ports`, and `internal/runner` wrap runtime integrations. User docs live in `README.md` and `README.zh-CN.md`; developer docs live in `docs/`.
+`cmd/godesk/main.go` is the CLI entrypoint. Cobra command wiring and the dependency-free TUI live in `internal/cli`. Shared behavior is split by responsibility: `internal/config` handles global config, scan roots, project index, and `.godesk.yaml`; `internal/project` handles Go module scanning and file discovery; `internal/envfile` and `internal/compose` parse project files; `internal/docker`, `internal/logtail`, `internal/ports`, and `internal/runner` wrap runtime integrations. Docker Compose commands such as `up`, `ps`, and `logs` use `internal/docker`. User docs live in `README.md` and `README.zh-CN.md`; developer docs live in `docs/`.
 
 ## Build, Test, and Development Commands
 

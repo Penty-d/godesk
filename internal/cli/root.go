@@ -32,6 +32,7 @@ func Execute() error {
 		newInspectCommand(ctx),
 		newDoctorCommand(ctx),
 		newUpCommand(ctx),
+		newPsCommand(ctx),
 		newPortsCommand(ctx),
 		newHealthCommand(ctx),
 		newLogsCommand(ctx),

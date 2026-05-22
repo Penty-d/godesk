@@ -15,6 +15,7 @@ godesk is a CLI workspace manager for local Go backend projects. It scans local 
 - Inspect resolved project config, env entries, and compose services
 - Check project configuration and local tool availability
 - Start dependency services with Docker Compose or a custom command
+- Show Docker Compose service status
 - Show local port occupancy from env and compose config
 - Tail configured log files and Docker Compose service logs
 - Check configured health URLs
@@ -109,6 +110,12 @@ Start dependency services:
 godesk up fzuhelper-server
 ```
 
+Show Compose services:
+
+```bash
+godesk ps fzuhelper-server
+```
+
 Run lint:
 
 ```bash
@@ -130,6 +137,7 @@ godesk init <project>
 godesk inspect <project>
 godesk doctor <project>
 godesk up <project>
+godesk ps <project>
 godesk ports <project>
 godesk health <project>
 godesk logs <project> [service...]
@@ -306,6 +314,16 @@ godesk up <project>
 ```
 
 If `up_cmd` is configured, godesk runs it as a shell command from the project root. Otherwise it runs Docker Compose with the resolved compose file.
+
+### `ps`
+
+Show Docker Compose service status:
+
+```bash
+godesk ps <project>
+```
+
+This runs Docker Compose with the resolved `compose_file` and prints the service table from Docker.
 
 ### `ports`
 
