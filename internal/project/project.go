@@ -262,6 +262,44 @@ func shouldSkipDir(name string, nested bool) bool {
 	return strings.HasPrefix(name, ".")
 }
 
+func ResolveProjectPath(root string, path string) (string, error) {
+	if path == "" {
+		return "", fmt.Errorf("empty project path")
+	}
+	rootAbs, err := filepath.Abs(root)
+	if err != nil {
+		return "", err
+	}
+	target := path
+	if !filepath.IsAbs(target) {
+		target = filepath.Join(rootAbs, target)
+	}
+	targetAbs, err := filepath.Abs(target)
+	if err != nil {
+		return "", err
+	}
+	rel, err := filepath.Rel(rootAbs, targetAbs)
+	if err != nil {
+		return "", err
+	}
+	if rel == ".." || strings.HasPrefix(rel, ".."+string(os.PathSeparator)) || filepath.IsAbs(rel) {
+		return "", fmt.Errorf("project path %q escapes root %s", path, rootAbs)
+	}
+	return targetAbs, nil
+}
+
+func NormalizeProjectPath(root string, path string) (string, error) {
+	resolved, err := ResolveProjectPath(root, path)
+	if err != nil {
+		return "", err
+	}
+	rootAbs, err := filepath.Abs(root)
+	if err != nil {
+		return "", err
+	}
+	return filepath.Rel(rootAbs, resolved)
+}
+
 var composeFileNames = []string{"docker-compose.yml", "docker-compose.yaml", "compose.yaml"}
 
 var envFileNames = []string{".env"}

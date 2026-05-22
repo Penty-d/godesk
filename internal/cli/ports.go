@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"path/filepath"
 	"text/tabwriter"
 
 	"github.com/spf13/cobra"
@@ -12,6 +11,7 @@ import (
 	"godesk/internal/compose"
 	"godesk/internal/envfile"
 	portscan "godesk/internal/ports"
+	"godesk/internal/project"
 )
 
 func newPortsCommand(app *appContext) *cobra.Command {
@@ -30,7 +30,11 @@ func newPortsCommand(app *appContext) *cobra.Command {
 			}
 			candidates := []portscan.Candidate{}
 			if p.EnvFile != "" {
-				file, err := os.Open(filepath.Join(p.Path, p.EnvFile))
+				envPath, err := project.ResolveProjectPath(p.Path, p.EnvFile)
+				if err != nil {
+					return err
+				}
+				file, err := os.Open(envPath)
 				if err != nil {
 					return err
 				}
@@ -42,7 +46,11 @@ func newPortsCommand(app *appContext) *cobra.Command {
 				candidates = append(candidates, portscan.FromEnv(entries)...)
 			}
 			if p.ComposeFile != "" {
-				file, err := compose.Load(filepath.Join(p.Path, p.ComposeFile))
+				composePath, err := project.ResolveProjectPath(p.Path, p.ComposeFile)
+				if err != nil {
+					return err
+				}
+				file, err := compose.Load(composePath)
 				if err != nil {
 					return err
 				}

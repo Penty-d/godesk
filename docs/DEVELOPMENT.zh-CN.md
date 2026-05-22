@@ -19,7 +19,7 @@ Go 1.25+
 运行时集成：
 
 ```text
-Docker CLI 和 Docker Compose 用于 `godesk up`
+Docker CLI 和 Docker Compose 用于 `godesk up` 和 `godesk logs`
 lsof 用于 `godesk ports`
 ```
 
@@ -68,6 +68,7 @@ godesk inspect <project>
 godesk up <project>
 godesk ports <project>
 godesk health <project>
+godesk logs <project> [service...]
 godesk lint <project>
 ```
 

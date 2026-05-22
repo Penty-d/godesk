@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"sync"
 	"time"
+
+	"godesk/internal/project"
 )
 
 type Tailer struct {
@@ -56,7 +57,11 @@ func (t Tailer) TailFiles(ctx context.Context, root string, paths []string, tail
 }
 
 func (t Tailer) tailFile(ctx context.Context, root string, path string, tail int, interval time.Duration) {
-	resolved := resolvePath(root, path)
+	resolved, err := project.ResolveProjectPath(root, path)
+	if err != nil {
+		fmt.Fprintf(t.Stderr, "[file:%s] %v\n", path, err)
+		return
+	}
 	file, err := os.Open(resolved)
 	if err != nil {
 		fmt.Fprintf(t.Stderr, "[file:%s] %v\n", path, err)
@@ -129,11 +134,4 @@ func lastLines(file *os.File, count int) ([]string, error) {
 		lines[len(lines)-1] = line
 	}
 	return lines, scanner.Err()
-}
-
-func resolvePath(root string, path string) string {
-	if filepath.IsAbs(path) {
-		return path
-	}
-	return filepath.Join(root, path)
 }

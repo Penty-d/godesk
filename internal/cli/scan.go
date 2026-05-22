@@ -36,7 +36,10 @@ func newScanCommand(app *appContext) *cobra.Command {
 					return err
 				}
 				if ok {
-					projects[i] = config.ApplyOverride(p, override)
+					projects[i], err = config.ApplyOverride(p, override)
+					if err != nil {
+						return err
+					}
 				}
 			}
 			if err := app.store.SaveIndex(config.ProjectIndex{Projects: projects}); err != nil {

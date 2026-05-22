@@ -1,0 +1,8 @@
+# macOS local files
+.DS_Store
+
+# Local tool settings
+.claude/
+
+# Local build output
+/godesk

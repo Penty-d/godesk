@@ -8,6 +8,8 @@ import (
 	"io"
 	"os/exec"
 	"strings"
+
+	"godesk/internal/project"
 )
 
 type Compose struct {
@@ -21,7 +23,11 @@ func (c Compose) Up(ctx context.Context, dir string, composeFile string) error {
 	}
 	args := []string{"compose"}
 	if composeFile != "" {
-		args = append(args, "-f", composeFile)
+		resolved, err := project.NormalizeProjectPath(dir, composeFile)
+		if err != nil {
+			return err
+		}
+		args = append(args, "-f", resolved)
 	}
 	args = append(args, "up", "-d")
 
@@ -45,7 +51,11 @@ func (c Compose) Logs(ctx context.Context, dir string, composeFile string, servi
 	}
 	args := []string{"compose"}
 	if composeFile != "" {
-		args = append(args, "-f", composeFile)
+		resolved, err := project.NormalizeProjectPath(dir, composeFile)
+		if err != nil {
+			return err
+		}
+		args = append(args, "-f", resolved)
 	}
 	args = append(args, "logs", "-f", "--tail", fmt.Sprintf("%d", tail))
 	args = append(args, services...)

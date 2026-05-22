@@ -19,7 +19,7 @@ Go 1.25+
 Runtime integrations:
 
 ```text
-Docker CLI and Docker Compose for `godesk up`
+Docker CLI and Docker Compose for `godesk up` and `godesk logs`
 lsof for `godesk ports`
 ```
 
@@ -68,6 +68,7 @@ godesk inspect <project>
 godesk up <project>
 godesk ports <project>
 godesk health <project>
+godesk logs <project> [service...]
 godesk lint <project>
 ```
 

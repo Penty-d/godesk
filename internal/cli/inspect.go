@@ -3,13 +3,13 @@ package cli
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 
 	"godesk/internal/compose"
 	"godesk/internal/envfile"
+	"godesk/internal/project"
 )
 
 func newInspectCommand(app *appContext) *cobra.Command {
@@ -30,7 +30,11 @@ func newInspectCommand(app *appContext) *cobra.Command {
 			fmt.Fprintf(out, "name: %s\npath: %s\nenv: %s\ncompose: %s\nlint: %s\nup: %s\nhealth: %s\nlogs: %s\n",
 				p.Name, p.Path, marker(p.EnvFile), marker(p.ComposeFile), marker(p.LintCmd), marker(p.UpCmd), listMarker(p.HealthURLs), listMarker(p.LogFiles))
 			if p.EnvFile != "" {
-				file, err := os.Open(filepath.Join(p.Path, p.EnvFile))
+				envPath, err := project.ResolveProjectPath(p.Path, p.EnvFile)
+				if err != nil {
+					return err
+				}
+				file, err := os.Open(envPath)
 				if err == nil {
 					defer file.Close()
 					entries, err := envfile.Parse(file)
@@ -44,7 +48,11 @@ func newInspectCommand(app *appContext) *cobra.Command {
 				}
 			}
 			if p.ComposeFile != "" {
-				file, err := compose.Load(filepath.Join(p.Path, p.ComposeFile))
+				composePath, err := project.ResolveProjectPath(p.Path, p.ComposeFile)
+				if err != nil {
+					return err
+				}
+				file, err := compose.Load(composePath)
 				if err != nil {
 					return err
 				}

@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -27,6 +28,10 @@ func newUpCommand(app *appContext) *cobra.Command {
 			ctx := context.Background()
 			if p.UpCmd != "" {
 				return runner.Runner{Stdout: os.Stdout, Stderr: os.Stderr}.Run(ctx, p.Path, p.UpCmd)
+			}
+			if p.ComposeFile == "" {
+				fmt.Fprintln(cmd.OutOrStdout(), "compose_file not configured; add compose_file or up_cmd to .godesk.yaml")
+				return nil
 			}
 			return dockercmd.Compose{Stdout: os.Stdout, Stderr: os.Stderr}.Up(ctx, p.Path, p.ComposeFile)
 		},

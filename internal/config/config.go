@@ -152,15 +152,23 @@ func SaveProjectOverride(root string, override ProjectOverride, overwrite bool) 
 	return path, os.WriteFile(path, data, 0o644)
 }
 
-func ApplyOverride(p project.Project, override ProjectOverride) project.Project {
+func ApplyOverride(p project.Project, override ProjectOverride) (project.Project, error) {
 	if override.Name != "" {
 		p.Name = override.Name
 	}
 	if override.EnvFile != "" {
-		p.EnvFile = override.EnvFile
+		envFile, err := project.NormalizeProjectPath(p.Path, override.EnvFile)
+		if err != nil {
+			return project.Project{}, fmt.Errorf("env_file: %w", err)
+		}
+		p.EnvFile = envFile
 	}
 	if override.ComposeFile != "" {
-		p.ComposeFile = override.ComposeFile
+		composeFile, err := project.NormalizeProjectPath(p.Path, override.ComposeFile)
+		if err != nil {
+			return project.Project{}, fmt.Errorf("compose_file: %w", err)
+		}
+		p.ComposeFile = composeFile
 	}
 	if override.LintCmd != "" {
 		p.LintCmd = override.LintCmd
@@ -172,9 +180,17 @@ func ApplyOverride(p project.Project, override ProjectOverride) project.Project 
 		p.HealthURLs = override.HealthURLs
 	}
 	if len(override.LogFiles) > 0 {
-		p.LogFiles = override.LogFiles
+		logFiles := make([]string, 0, len(override.LogFiles))
+		for _, logFile := range override.LogFiles {
+			normalized, err := project.NormalizeProjectPath(p.Path, logFile)
+			if err != nil {
+				return project.Project{}, fmt.Errorf("log_files: %w", err)
+			}
+			logFiles = append(logFiles, normalized)
+		}
+		p.LogFiles = logFiles
 	}
-	return p
+	return p, nil
 }
 
 func readYAML(path string, out any) error {
